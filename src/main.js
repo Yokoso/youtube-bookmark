@@ -3,8 +3,11 @@ import App from './App.vue';
 import router from './router';
 import store from './store';
 import firebase from 'firebase';
+import VueFire from 'vuefire';
+import 'firebase/firestore';
 
 Vue.config.productionTip = false;
+Vue.use(VueFire);
 
 var config = {
     apiKey: "AIzaSyCLqF5ESkOdyup2fwinsFKLgeug40G-zJU",
@@ -15,6 +18,8 @@ var config = {
     messagingSenderId: "692594211657"
 };
 firebase.initializeApp(config);
+
+export const db = firebase.firestore();
 
 new Vue({
   router,

@@ -31,26 +31,85 @@
             </div>
 
             <div class="field" v-else>
-              <p class="control">
-                <button @click="logOut" class="button is-danger">Log out</button>
-              </p>
+              <div class="field is-grouped">
+                <p class="control">
+                  <button @click="showCategoryForm = !showCategoryForm" class="button is-primary">Add category</button>
+                </p>
+                <p class="control">
+                  <button @click="showMovieForm = !showMovieForm" class="button is-primary">Add movie</button>
+                </p>
+                <p class="control">
+                  <button @click="logOut" class="button is-danger">Log out</button>
+                </p>
+              </div>
             </div>
           </div>
         </div>
 
       </div>
     </nav>
+
+    <div class="modal" :class="{ 'is-active' : showCategoryForm }">
+      <div class="modal-background">
+      </div>
+      <div class="modal-content">
+        <form @submit.prevent="addCategory">
+          <div class="field">
+            <input type="text" class="input" v-model="title">
+          </div>
+          <div class="field">
+            <button class="button is-success">Add</button>
+          </div>
+        </form>
+      </div>
+      <button class="modal-close is-large" aria-label="close" @click="showCategoryForm = !showCategoryForm"></button>
+    </div>
+
+    <div class="modal" :class="{ 'is-active' : showMovieForm }">
+      <div class="modal-background">
+      </div>
+      <div class="modal-content">
+        <form @submit.prevent="addMovie">
+          <div class="field">
+            <input type="text" class="input" v-model="title">
+          </div>
+
+          <div class="field">
+            <select v-model="category">
+              <option value="empty" selected>Choose category</option>
+              <option v-for="category in categories" :value="category.id">{{ category.title }}</option>
+            </select>
+          </div>
+          <div class="field">
+            <button class="button is-success">Add</button>
+          </div>
+        </form>
+      </div>
+      <button class="modal-close is-large" aria-label="close" @click="showMovieForm = !showMovieForm"></button>
+    </div>
+
     <router-view />
   </div>
 </template>
 
 <script>
 import firebase from 'firebase';
+import { db } from './main'
 
 export default {
   data() {
     return {
-      isAuthenticated: false
+      isAuthenticated: false,
+      showCategoryForm: false,
+      showMovieForm: false,
+      title: '',
+      category: 'empty',
+      categories: []
+    }
+  },
+  firestore() {
+    return {
+      categories: db.collection('categories')
     }
   },
   created() {
@@ -61,6 +120,21 @@ export default {
     })
   },
   methods: {
+    addCategory() {
+      const category = {
+        title: this.title
+      }
+
+      db.collection('categories').add(category)
+
+      this.showCategoryForm = false
+      this.title = ''
+    },
+    addMovie() {
+      const movie = {
+
+      }
+    },
     logOut() {
       firebase.auth().signOut()
       .then(() => {
