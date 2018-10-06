@@ -71,7 +71,11 @@
       <div class="modal-content">
         <form @submit.prevent="addMovie">
           <div class="field">
-            <input type="text" class="input" v-model="title">
+            <input type="text" class="input" v-model="title" placeholder="Title">
+          </div>
+
+          <div class="field">
+            <input type="text" class="input" v-model="url" placeholder="URL">
           </div>
 
           <div class="field">
@@ -103,6 +107,7 @@ export default {
       showCategoryForm: false,
       showMovieForm: false,
       title: '',
+      url: '',
       category: 'empty',
       categories: []
     }
@@ -131,8 +136,21 @@ export default {
       this.title = ''
     },
     addMovie() {
-      const movie = {
+      if(this.title && this.category !== 'empty') {
+        const movie = {
+          title: this.title,
+          url: this.url
+        }
 
+        db.collection('categories').doc(this.category).collection('movies').add(movie)
+
+        this.title = ''
+        this.url = ''
+        this.category = 'empty'
+        this.showMovieForm = false
+      }
+      else {
+        alert('You have to fill out all the fields')
       }
     },
     logOut() {
