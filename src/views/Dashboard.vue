@@ -8,16 +8,22 @@
           <a @click="setCategory(category.title)">{{ category.title }}</a>
         </li>
       </ul>
-
     </div>
+    <TabMovie
+      v-for="category in categories"
+      :key="category.id"
+      :category="category.id">
+    </TabMovie>
   </div>
 </template>
 
 <script>
 import { db } from '../main.js'
+import TabMovie from '../components/TabMovie.vue'
 
 export default {
   name: 'Dashboard',
+  components: { TabMovie },
   data() {
     return {
       categories: [],
