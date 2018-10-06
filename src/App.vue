@@ -36,6 +36,9 @@
                   <button @click="showCategoryForm = !showCategoryForm" class="button is-primary">Add category</button>
                 </p>
                 <p class="control">
+                  <button @click="showMovieForm = !showMovieForm" class="button is-primary">Add movie</button>
+                </p>
+                <p class="control">
                   <button @click="logOut" class="button is-danger">Log out</button>
                 </p>
               </div>
@@ -62,6 +65,29 @@
       <button class="modal-close is-large" aria-label="close" @click="showCategoryForm = !showCategoryForm"></button>
     </div>
 
+    <div class="modal" :class="{ 'is-active' : showMovieForm }">
+      <div class="modal-background">
+      </div>
+      <div class="modal-content">
+        <form @submit.prevent="addMovie">
+          <div class="field">
+            <input type="text" class="input" v-model="title">
+          </div>
+
+          <div class="field">
+            <select v-model="category">
+              <option value="empty" selected>Choose category</option>
+              <option v-for="category in categories" :value="category.id">{{ category.title }}</option>
+            </select>
+          </div>
+          <div class="field">
+            <button class="button is-success">Add</button>
+          </div>
+        </form>
+      </div>
+      <button class="modal-close is-large" aria-label="close" @click="showMovieForm = !showMovieForm"></button>
+    </div>
+
     <router-view />
   </div>
 </template>
@@ -75,7 +101,15 @@ export default {
     return {
       isAuthenticated: false,
       showCategoryForm: false,
-      title: ''
+      showMovieForm: false,
+      title: '',
+      category: 'empty',
+      categories: []
+    }
+  },
+  firestore() {
+    return {
+      categories: db.collection('categories')
     }
   },
   created() {
@@ -95,6 +129,11 @@ export default {
 
       this.showCategoryForm = false
       this.title = ''
+    },
+    addMovie() {
+      const movie = {
+
+      }
     },
     logOut() {
       firebase.auth().signOut()
