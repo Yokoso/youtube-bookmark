@@ -9,10 +9,18 @@
         </li>
       </ul>
     </div>
+
+    <TabMovie
+      category="Newest"
+      v-if="activeCategory === 'Newest'"
+      :categories="categories">
+    </TabMovie>
+
     <TabMovie
       v-for="category in categories"
       :key="category.id"
-      :category="category.id">
+      :category="category.id"
+      v-if="activeCategory === category.title">
     </TabMovie>
   </div>
 </template>
