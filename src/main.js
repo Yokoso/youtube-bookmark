@@ -20,6 +20,8 @@ var config = {
 firebase.initializeApp(config);
 
 export const db = firebase.firestore();
+const settings = {/* your settings... */ timestampsInSnapshots: true};
+db.settings(settings);
 
 new Vue({
   router,
